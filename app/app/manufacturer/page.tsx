@@ -250,7 +250,7 @@ export default function ManufacturerPage() {
     );
   }
 
-  // Owner but not self-authorized - show self-authorization
+  // Owner but not self-authorized - redirect to admin page to authorize
   if (isOwner && !isAuthorized) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
@@ -285,17 +285,15 @@ export default function ManufacturerPage() {
             </p>
             <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
               <p className="text-sm text-green-900">
-                This is a one-time setup. Click the button below to authorize yourself.
+                Click below to go to the authorization page where you can authorize yourself with one click.
               </p>
             </div>
-            <button
-              onClick={handleRequestAuthorization}
-              disabled={isWriting || isConfirming}
-              className="w-full px-6 py-4 bg-green-600 text-white rounded-xl font-semibold hover:bg-green-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            <Link
+              href="/admin"
+              className="block w-full px-6 py-4 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition-colors"
             >
-              {(isWriting || isConfirming) && <Loader2 className="h-5 w-5 animate-spin" />}
-              {isWriting ? 'Confirming Transaction...' : isConfirming ? 'Authorizing...' : 'Authorize Myself'}
-            </button>
+              Go to Authorization Page
+            </Link>
           </div>
         </div>
       </div>

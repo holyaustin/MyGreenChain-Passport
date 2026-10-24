@@ -15,6 +15,12 @@ export default function Home() {
             </div>
             <div className="flex gap-4">
               <Link
+                href="/admin"
+                className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors"
+              >
+                Admin
+              </Link>
+              <Link
                 href="/manufacturer"
                 className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-green-600 transition-colors"
               >
