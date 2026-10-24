@@ -1,13 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-import { useWriteContract, useWaitForTransactionReceipt, useAccount, useConnect, useDisconnect } from 'wagmi';
+import { useWriteContract, useWaitForTransactionReceipt, useAccount, useConnect, useDisconnect, useReadContract } from 'wagmi';
 import { injected } from 'wagmi/connectors';
-import { parseEther } from 'viem';
 import { CONTRACT_ADDRESS } from '@/lib/wagmi';
 import { PRODUCT_PASSPORT_ABI } from '@/lib/contract-abi';
 import { calculateSustainabilityScore, generateQRCodeURL } from '@/lib/utils';
-import { Leaf, Loader2, CheckCircle, AlertCircle } from 'lucide-react';
+import { Leaf, Loader2, CheckCircle, AlertCircle, Shield } from 'lucide-react';
 import Link from 'next/link';
 
 export default function ManufacturerPage() {
@@ -16,6 +15,23 @@ export default function ManufacturerPage() {
   const { disconnect } = useDisconnect();
   const { writeContract, data: hash, isPending: isWriting } = useWriteContract();
   const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({ hash });
+
+  // Check if user is authorized manufacturer
+  const { data: isAuthorized, isLoading: checkingAuth, refetch: refetchAuth } = useReadContract({
+    address: CONTRACT_ADDRESS,
+    abi: PRODUCT_PASSPORT_ABI,
+    functionName: 'authorizedManufacturers',
+    args: address ? [address] : undefined,
+  });
+
+  // Check if user is the contract owner
+  const { data: owner } = useReadContract({
+    address: CONTRACT_ADDRESS,
+    abi: PRODUCT_PASSPORT_ABI,
+    functionName: 'owner',
+  });
+
+  const isOwner = address && owner && address.toLowerCase() === owner.toLowerCase();
 
   const [formData, setFormData] = useState({
     productName: '',
@@ -27,6 +43,39 @@ export default function ManufacturerPage() {
   });
 
   const [mintedTokenId, setMintedTokenId] = useState<string | null>(null);
+  const [authRequesting, setAuthRequesting] = useState(false);
+
+  // Request authorization from owner
+  const handleRequestAuthorization = async () => {
+    if (!isOwner) {
+      alert('Only the contract owner can authorize manufacturers. Please contact the platform administrator.');
+      return;
+    }
+
+    setAuthRequesting(true);
+    try {
+      writeContract({
+        address: CONTRACT_ADDRESS,
+        abi: PRODUCT_PASSPORT_ABI,
+        functionName: 'authorizeManufacturer',
+        args: [address]
+      });
+    } catch (error) {
+      console.error('Authorization error:', error);
+      setAuthRequesting(false);
+    }
+  };
+
+  // Wait for authorization transaction
+  const { isSuccess: authSuccess } = useWaitForTransactionReceipt({
+    hash: authRequesting ? hash : undefined
+  });
+
+  // Refetch auth status when authorization succeeds
+  if (authSuccess && authRequesting) {
+    setAuthRequesting(false);
+    refetchAuth();
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -73,6 +122,7 @@ export default function ManufacturerPage() {
     }
   };
 
+  // Not connected - show connect wallet
   if (!isConnected) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
@@ -106,6 +156,153 @@ export default function ManufacturerPage() {
     );
   }
 
+  // Connected but checking authorization
+  if (checkingAuth) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
+        <nav className="border-b bg-white/80 backdrop-blur-sm">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-between items-center h-16">
+              <Link href="/" className="flex items-center gap-2">
+                <Leaf className="h-8 w-8 text-green-600" />
+                <span className="text-xl font-bold text-gray-900">MyGreenChain Passport</span>
+              </Link>
+              <button
+                onClick={() => disconnect()}
+                className="px-4 py-2 text-sm text-gray-600 hover:text-gray-900"
+              >
+                Disconnect
+              </button>
+            </div>
+          </div>
+        </nav>
+
+        <div className="flex items-center justify-center py-32 px-4">
+          <div className="text-center">
+            <Loader2 className="h-12 w-12 text-green-600 animate-spin mx-auto mb-4" />
+            <p className="text-gray-600">Checking authorization status...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Connected but NOT authorized - show authorization request
+  if (!isAuthorized && !isOwner) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
+        <nav className="border-b bg-white/80 backdrop-blur-sm">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-between items-center h-16">
+              <Link href="/" className="flex items-center gap-2">
+                <Leaf className="h-8 w-8 text-green-600" />
+                <span className="text-xl font-bold text-gray-900">MyGreenChain Passport</span>
+              </Link>
+              <div className="flex items-center gap-4">
+                <span className="text-sm text-gray-600">
+                  {address?.slice(0, 6)}...{address?.slice(-4)}
+                </span>
+                <button
+                  onClick={() => disconnect()}
+                  className="px-4 py-2 text-sm text-gray-600 hover:text-gray-900"
+                >
+                  Disconnect
+                </button>
+              </div>
+            </div>
+          </div>
+        </nav>
+
+        <div className="flex items-center justify-center py-32 px-4">
+          <div className="bg-white rounded-2xl shadow-xl p-12 max-w-md text-center">
+            <AlertCircle className="h-16 w-16 text-yellow-500 mx-auto mb-6" />
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Authorization Required</h2>
+            <p className="text-gray-600 mb-6">
+              Your wallet is not authorized to register products. Only verified manufacturers can create product passports.
+            </p>
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6 text-left">
+              <p className="text-sm text-blue-900 mb-2">
+                <strong>To get authorized:</strong>
+              </p>
+              <ol className="text-sm text-blue-800 space-y-1 list-decimal list-inside">
+                <li>Contact the platform administrator</li>
+                <li>Provide your wallet address: <code className="bg-blue-100 px-2 py-0.5 rounded text-xs">{address?.slice(0, 8)}...{address?.slice(-6)}</code></li>
+                <li>Wait for authorization approval</li>
+              </ol>
+            </div>
+            <div className="flex gap-3">
+              <Link
+                href="/"
+                className="flex-1 px-6 py-3 bg-gray-200 text-gray-700 rounded-xl font-semibold hover:bg-gray-300 transition-colors"
+              >
+                Go Home
+              </Link>
+              <button
+                onClick={() => refetchAuth()}
+                className="flex-1 px-6 py-3 bg-green-600 text-white rounded-xl font-semibold hover:bg-green-700 transition-colors"
+              >
+                Check Again
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Owner but not self-authorized - show self-authorization
+  if (isOwner && !isAuthorized) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
+        <nav className="border-b bg-white/80 backdrop-blur-sm">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-between items-center h-16">
+              <Link href="/" className="flex items-center gap-2">
+                <Leaf className="h-8 w-8 text-green-600" />
+                <span className="text-xl font-bold text-gray-900">MyGreenChain Passport</span>
+              </Link>
+              <div className="flex items-center gap-4">
+                <span className="text-sm text-gray-600">
+                  {address?.slice(0, 6)}...{address?.slice(-4)}
+                </span>
+                <button
+                  onClick={() => disconnect()}
+                  className="px-4 py-2 text-sm text-gray-600 hover:text-gray-900"
+                >
+                  Disconnect
+                </button>
+              </div>
+            </div>
+          </div>
+        </nav>
+
+        <div className="flex items-center justify-center py-32 px-4">
+          <div className="bg-white rounded-2xl shadow-xl p-12 max-w-md text-center">
+            <Shield className="h-16 w-16 text-blue-600 mx-auto mb-6" />
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Welcome, Contract Owner!</h2>
+            <p className="text-gray-600 mb-6">
+              You're the contract owner. To register products, you need to authorize yourself as a manufacturer first.
+            </p>
+            <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+              <p className="text-sm text-green-900">
+                This is a one-time setup. Click the button below to authorize yourself.
+              </p>
+            </div>
+            <button
+              onClick={handleRequestAuthorization}
+              disabled={isWriting || isConfirming}
+              className="w-full px-6 py-4 bg-green-600 text-white rounded-xl font-semibold hover:bg-green-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            >
+              {(isWriting || isConfirming) && <Loader2 className="h-5 w-5 animate-spin" />}
+              {isWriting ? 'Confirming Transaction...' : isConfirming ? 'Authorizing...' : 'Authorize Myself'}
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Success screen after product registration
   if (isSuccess && mintedTokenId) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
@@ -168,6 +365,7 @@ export default function ManufacturerPage() {
     );
   }
 
+  // Authorized - show product registration form
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
       <nav className="border-b bg-white/80 backdrop-blur-sm">
@@ -178,6 +376,14 @@ export default function ManufacturerPage() {
               <span className="text-xl font-bold text-gray-900">MyGreenChain Passport</span>
             </Link>
             <div className="flex items-center gap-4">
+              {isOwner && (
+                <span className="px-3 py-1 bg-blue-100 text-blue-800 text-xs font-semibold rounded-full">
+                  Owner
+                </span>
+              )}
+              <span className="px-3 py-1 bg-green-100 text-green-800 text-xs font-semibold rounded-full">
+                ✓ Authorized
+              </span>
               <span className="text-sm text-gray-600">
                 {address?.slice(0, 6)}...{address?.slice(-4)}
               </span>

@@ -5,6 +5,15 @@ export const PRODUCT_PASSPORT_ABI = [
     "type": "constructor"
   },
   {
+    "inputs": [],
+    "name": "owner",
+    "outputs": [
+      { "internalType": "address", "name": "", "type": "address" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       { "internalType": "address", "name": "manufacturer", "type": "address" }
     ],
