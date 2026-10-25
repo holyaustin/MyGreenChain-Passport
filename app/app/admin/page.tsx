@@ -370,7 +370,7 @@ export default function AdminAuthorizePage() {
                   setAddressError('');
                 }}
                 placeholder="0x742d35Cc6634C0532925a3b844Bc454e4438f44e"
-                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono text-sm ${
+                className={`w-full text-gray-900 px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono text-sm ${
                   addressError ? 'border-red-500' : 'border-gray-300'
                 }`}
               />

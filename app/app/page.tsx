@@ -70,7 +70,7 @@ export default function Home() {
             <h2 className="text-3xl font-bold text-center text-gray-900 mb-16">
               How It Works
             </h2>
-            <div className="grid md:grid-cols-3 gap-12">
+            <div className="grid md:grid-cols-3 gap-12 text-gray-600">
               <div className="text-center">
                 <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-6">
                   <Shield className="h-8 w-8 text-green-600" />
