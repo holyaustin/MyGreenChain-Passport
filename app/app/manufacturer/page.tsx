@@ -370,7 +370,7 @@ export default function ManufacturerPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <Link href="/" className="flex items-center gap-2">
-              <Leaf className="h-8 w-8 text-green-600" />
+              <Leaf className="h-8 w-8 text-green-900" />
               <span className="text-xl font-bold text-gray-900">MyGreenChain Passport</span>
             </Link>
             <div className="flex items-center gap-4">
@@ -411,7 +411,7 @@ export default function ManufacturerPage() {
                 required
                 value={formData.productName}
                 onChange={(e) => setFormData({ ...formData, productName: e.target.value })}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className="w-full text-gray-700 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 placeholder="Eco-friendly T-Shirt"
               />
             </div>
@@ -425,7 +425,7 @@ export default function ManufacturerPage() {
                 required
                 value={formData.manufacturer}
                 onChange={(e) => setFormData({ ...formData, manufacturer: e.target.value })}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className="w-full text-gray-700 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 placeholder="GreenTextiles Inc"
               />
             </div>
@@ -440,7 +440,7 @@ export default function ManufacturerPage() {
                 required
                 value={formData.carbonFootprint}
                 onChange={(e) => setFormData({ ...formData, carbonFootprint: e.target.value })}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className="w-full text-gray-700 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 placeholder="5.0"
               />
             </div>
@@ -454,7 +454,7 @@ export default function ManufacturerPage() {
                 required
                 value={formData.materialComposition}
                 onChange={(e) => setFormData({ ...formData, materialComposition: e.target.value })}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className="w-full text-gray-700 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 placeholder="100% Organic Cotton"
               />
             </div>
@@ -468,7 +468,7 @@ export default function ManufacturerPage() {
                 required
                 value={formData.originCountry}
                 onChange={(e) => setFormData({ ...formData, originCountry: e.target.value })}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className="w-full text-gray-700 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 placeholder="Portugal"
               />
             </div>
@@ -481,7 +481,7 @@ export default function ManufacturerPage() {
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                 rows={3}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className="w-full text-gray-700 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 placeholder="Sustainable, ethically produced clothing..."
               />
             </div>

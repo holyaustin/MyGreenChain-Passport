@@ -4,3 +4,10 @@ Create a new frontend page for the authorize hardhat script. This will enable us
 connect wallt -> check -> if not authorise, open authorize page -> open manufacturer page
 
 /model nvidia/nvidia/nemotron-3-super-120b-a12b
+
+cd ../contracts
+npx hardhat console --network somniaTestnet
+const ProductPassport = await ethers.getContractFactory("ProductPassport");
+const contract = await ProductPassport.attach("0x6662CbdB03CBa375e2697c65A8F2d53f5135CA6F");
+const [deployer] = await ethers.getSigners();
+await contract.authorizeManufacturer(deployer.address);

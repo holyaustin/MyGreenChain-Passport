@@ -217,7 +217,7 @@ export default function ProductPage({ params }: { params: Promise<{ id: string }
 
         <div className="bg-white rounded-xl shadow p-6 text-sm text-gray-600">
           <h3 className="font-semibold text-gray-900 mb-2">Blockchain Verification</h3>
-          <p className="mb-2">This product passport is permanently recorded on the Polygon blockchain.</p>
+          <p className="mb-2">This product passport is permanently recorded on the Somnia blockchain.</p>
           <div className="flex items-center gap-2 text-xs">
             <span>Token ID: #{id}</span>
             <span>•</span>

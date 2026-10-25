@@ -104,60 +104,6 @@ Outputs: 0-100 score with A+ to F grade + color coding
 
 ---
 
-## 🚀 NEXT STEPS TO WIN
-
-### Immediate (Tonight - 2 hours)
-1. ✅ Smart contracts compiled
-2. ⏳ **Deploy to Polygon Amoy testnet** (15 min)
-   ```bash
-   cd contracts
-   # Add private key to .env
-   npx hardhat run scripts/deploy.js --network polygonAmoy
-   ```
-3. ⏳ **Update frontend with contract address** (5 min)
-4. ⏳ **Test full user flow** (30 min)
-
-### Tomorrow (Oct 24 - 6 hours)
-5. ⏳ **Record demo video** (2 hours)
-   - Screen recording with Loom/OBS
-   - Follow DEMO_SCRIPT.md
-   - Show: Problem → Manufacturer flow → Consumer flow → Impact
-6. ⏳ **Create GitHub repo** (30 min)
-   - Clean commits
-   - Professional README
-   - MIT license
-7. ⏳ **Deploy to Vercel** (30 min)
-   - Production URL for live demo
-8. ⏳ **Polish UI** (2 hours)
-   - Error messages
-   - Loading states
-   - Mobile testing
-
-### Final Day (Oct 25 - Morning)
-9. ⏳ **Devpost Submission** (2 hours)
-   - Project title & tagline
-   - Description (use README)
-   - Upload demo video
-   - Add GitHub + live demo URLs
-   - Submit screenshots
-10. ⏳ **Final testing** (1 hour)
-11. ✅ **SUBMIT** before 3:00 PM GMT+1
-
----
-
-## 💰 Resource Requirements
-
-### For Testing & Demo:
-- **Polygon Amoy Testnet MATIC**: FREE from [faucet.polygon.technology](https://faucet.polygon.technology/)
-- **MetaMask Wallet**: FREE browser extension
-- **Vercel Deployment**: FREE tier (perfect for demos)
-- **Screen Recording**: FREE (Loom/OBS)
-
-### Gas Costs (Testnet):
-- Deploy contract: ~0.05 test MATIC
-- Register product: ~0.01 test MATIC
-- **Total**: ~$0 (testnet is free!)
-
 ---
 
 ## 🎬 Demo Video Outline (3-5 min)
@@ -284,18 +230,16 @@ We're not just building for this hackathon—we're building the infrastructure f
 **Want to test it?**
 
 1. Install MetaMask
-2. Switch to Polygon Amoy testnet
-3. Get free test MATIC: https://faucet.polygon.technology/
-4. Visit [LIVE DEMO URL - will add after deployment]
+2. Switch to Somnia testnet
+3. Get free Somnia testnet from faucet: https://cloud.google.com/application/web3/faucet
+4. Visit [LIVE DEMO URL ] https://mygreenchain.vercel.app/
 5. Connect wallet → Register product → View passport
 
 **That's it!** No complex setup, no hidden dependencies.
 
 ---
 
-## 🎊 CONGRATULATIONS!
 
-You've built a complete, production-ready blockchain sustainability platform in under 24 hours!
 
 **Next Action**: Deploy contracts and test the full flow.
 

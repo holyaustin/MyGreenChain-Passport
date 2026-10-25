@@ -77,7 +77,7 @@ export default function Home() {
                 </div>
                 <h3 className="text-xl font-semibold mb-4">Blockchain Verified</h3>
                 <p className="text-gray-600">
-                  Immutable product records stored on Polygon blockchain prevent greenwashing and ensure data integrity
+                  Immutable product records stored on Somnia blockchain prevent greenwashing and ensure data integrity
                 </p>
               </div>
               <div className="text-center">

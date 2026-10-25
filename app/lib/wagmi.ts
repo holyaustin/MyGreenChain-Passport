@@ -1,13 +1,25 @@
 import { createConfig, http } from 'wagmi';
-import { polygonAmoy, polygon, polygonMumbai } from 'wagmi/chains';
+import { injected } from 'wagmi/connectors';
+import { defineChain } from 'viem';
+
+const SOMNIA_RPC = process.env.NEXT_PUBLIC_SOMNIA_RPC || 'https://dream-rpc.somnia.network';
+
+export const somniaTestnet = defineChain({
+  id: 50312,
+  name: 'Somnia Testnet',
+  nativeCurrency: { name: 'Somnia Test Token', symbol: 'STT', decimals: 18 },
+  rpcUrls: { default: { http: [SOMNIA_RPC] } },
+  blockExplorers: {
+    default: { name: 'Somnia Explorer', url: 'https://shannon-explorer.somnia.network' },
+  },
+  testnet: true,
+});
 
 export const config = createConfig({
-  chains: [polygonAmoy, polygonMumbai, polygon],
-  transports: {
-    [polygonAmoy.id]: http(process.env.NEXT_PUBLIC_POLYGON_AMOY_RPC),
-    [polygonMumbai.id]: http(process.env.NEXT_PUBLIC_POLYGON_MUMBAI_RPC),
-    [polygon.id]: http(),
-  },
+  chains: [somniaTestnet],
+  connectors: [injected()],
+  transports: { [somniaTestnet.id]: http(SOMNIA_RPC) },
+  ssr: true,
 });
 
 export const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS as `0x${string}`;
